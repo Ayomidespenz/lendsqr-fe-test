@@ -1,0 +1,34 @@
+@import '../styles/variables.scss';
+@import '../styles/mixins.scss';
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.active {
+  background-color: #e1fce9;
+  color: #39cdcc;
+}
+
+.inactive {
+  background-color: #f0eeee;
+  color: #545454;
+}
+
+.pending {
+  background-color: #fff3cd;
+  color: #ff8b00;
+}
+
+.blacklisted {
+  background-color: #fde8e8;
+  color: #e3165b;
+}

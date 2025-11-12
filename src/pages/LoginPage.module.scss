@@ -20,6 +20,7 @@
 // border: 3px solid red;
   position: relative;
   margin-bottom: -60px;
+ 
 
   @include media-md {
     display: none; // Hide on mobile

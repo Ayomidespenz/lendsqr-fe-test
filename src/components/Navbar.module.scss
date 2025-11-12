@@ -1,0 +1,285 @@
+@import '../styles/variables.scss';
+@import '../styles/mixins.scss';
+
+.navbar {
+  background-color: $white;
+  border-bottom: 1px solid $border;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  box-shadow: $shadow-sm;
+}
+
+.container {
+  max-width: 100%;
+  padding: 0 $spacing-lg;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-lg;
+
+  @include media-md {
+    padding: 0 $spacing-md;
+  }
+
+  @include media-sm {
+    padding: 0 $spacing-sm;
+  }
+}
+
+// Left Section - Logo
+.left {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+
+  @include media-md {
+    display: none; // Hide logo on mobile, sidebar has it
+  }
+}
+
+.logoIcon {
+  width: 36px;
+  height: 36px;
+  background-color: $primary;
+  color: $white;
+  border-radius: $radius-md;
+  @include flex-center;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-sm;
+}
+
+.logoText {
+  font-weight: $font-weight-bold;
+  color: $heading;
+  font-size: $font-size-lg;
+}
+
+// Center Section - Search
+.center {
+  flex: 1;
+  max-width: 400px;
+}
+
+.searchContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: $white;
+  border-radius: $radius-lg;
+  border: 1px solid $border;
+  overflow: hidden;
+  @include transition;
+
+  &:focus-within {
+    border-color: $primary;
+    box-shadow: $shadow-sm;
+  }
+}
+
+.searchInput {
+  @include input-reset;
+  flex: 1;
+  padding: $spacing-md $spacing-lg;
+  background-color: transparent;
+  font-size: $font-size-base;
+
+  &::placeholder {
+    color: $text-secondary;
+  }
+}
+
+.searchButton {
+  @include button-reset;
+  padding: $spacing-lg;
+  background-color: $primary;
+  color: $white;
+  font-size: $font-size-lg;
+  cursor: pointer;
+  @include transition;
+  border-top-right-radius: $radius-lg;
+  border-bottom-right-radius: $radius-lg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+   height: 44px;
+
+  &:hover {
+    background-color: darken($primary, 8%);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.searchIcon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+// Right Section
+.right {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+  flex-shrink: 0;
+}
+
+.docLink {
+  color: $primary;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  @include transition;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  @include media-sm {
+    display: none;
+  }
+}
+
+.iconButton {
+  @include button-reset;
+  padding: $spacing-md;
+  color: $text-secondary;
+  font-size: $font-size-lg;
+  cursor: pointer;
+  @include transition;
+  position: relative;
+
+  &:hover {
+    color: $primary;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background-color: $error;
+    border-radius: $radius-full;
+  }
+}
+
+// Profile Menu
+.profileMenu {
+  position: relative;
+}
+
+.profileButton {
+  @include button-reset;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+  @include transition;
+
+  &:hover {
+    background-color: $bg-light;
+  }
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: $radius-md;
+  object-fit: cover;
+}
+
+.userName {
+  font-size: $font-size-base;
+  color: $text-primary;
+  font-weight: $font-weight-medium;
+
+  @include media-sm {
+    display: none;
+  }
+}
+
+.dropdown {
+  color: $text-secondary;
+  font-size: $font-size-sm;
+  @include transition;
+}
+
+// Dropdown Menu
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: $spacing-sm;
+  background-color: $white;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  box-shadow: $shadow-lg;
+  min-width: 180px;
+  z-index: 1000;
+  animation: slideDown 200ms ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menuItem {
+  @include button-reset;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  width: 100%;
+  padding: $spacing-md $spacing-lg;
+  color: $text-primary;
+  text-decoration: none;
+  font-size: $font-size-base;
+  text-align: left;
+  @include transition;
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $bg-light;
+    color: $primary;
+  }
+
+  &:first-child {
+    border-top-left-radius: $radius-md;
+    border-top-right-radius: $radius-md;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: $radius-md;
+    border-bottom-right-radius: $radius-md;
+  }
+
+  &.logout {
+    color: $error;
+
+    &:hover {
+      background-color: rgba($error, 0.1);
+      color: darken($error, 10%);
+    }
+  }
+}

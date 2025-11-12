@@ -1,0 +1,344 @@
+@import '../styles/variables.scss';
+@import '../styles/mixins.scss';
+
+.userDetails {
+  width: 100%;
+}
+
+.header {
+  margin-bottom: $spacing-2xl;
+}
+
+.backBtn {
+  @include button-reset;
+  color: $text-secondary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  @include transition;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm;
+  margin-bottom: $spacing-md;
+
+  &:hover {
+    color: $heading;
+  }
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-lg;
+}
+
+.title {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  color: $heading;
+}
+
+.actionButtons {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.btn {
+  @include button-reset;
+  padding: $spacing-sm $spacing-lg;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: $radius-sm;
+  border: 2px solid;
+  cursor: pointer;
+  @include transition;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &.danger {
+    border-color: $error;
+    color: $error;
+    background-color: transparent;
+
+    &:hover {
+      background-color: rgba($error, 0.1);
+    }
+  }
+
+  &.success {
+    border-color: $success;
+    color: $success;
+    background-color: transparent;
+
+    &:hover {
+      background-color: rgba($success, 0.1);
+    }
+  }
+
+  @include media-md {
+    padding: $spacing-xs $spacing-md;
+    font-size: 10px;
+  }
+}
+
+.profileCard {
+  background-color: $white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+  margin-bottom: $spacing-2xl;
+}
+
+.profileHeader {
+  padding: $spacing-2xl;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border-bottom: 1px solid $border;
+}
+
+.avatarSection {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+  padding-right: $spacing-2xl;
+  border-right: 1px solid $border;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: $bg-light;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  color: $primary;
+  flex-shrink: 0;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.userName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $heading;
+  margin: 0;
+}
+
+.userTierId {
+  font-size: $font-size-sm;
+  color: $text-secondary;
+  margin: 0;
+}
+
+.tierDisplay {
+  display: flex;
+  gap: $spacing-xs;
+  padding: 0 $spacing-2xl;
+  // border-right: 1px solid $border;
+  align-items: center;
+  min-width: 100px;
+}
+
+.tierSection {
+  // padding: 0 $spacing-2xl;
+   border-right: 1px solid $border;
+  text-align: center;
+  flex: 0 0 auto;
+
+  p {
+    margin: 0;
+  }
+}
+
+.tierLabel {
+  font-size: $font-size-xs;
+  color: $text-secondary;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-xs;
+}
+
+.starIcon {
+  font-size: $font-size-lg;
+  color: #e5e5e5;
+  @include transition;
+
+  &.filled {
+    color: $warning;
+  }
+}
+
+.accountInfo {
+  display: flex;
+  gap: 0;
+  flex: 1;
+  align-items: center;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  // gap: $spacing-xs;
+  padding: 0 $spacing-2xl;
+  flex: 1;
+  // border-right: 1px solid $border;
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+.infoLabel {
+  font-size: $font-size-sm;
+  color: $text-secondary;
+  margin: 0;
+  // text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: $font-weight-medium;
+}
+
+.infoValue {
+  font-size: $font-size-base;
+  color: $heading;
+  margin: 0;
+  font-weight: $font-weight-semibold;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid $border;
+  padding: 0 $spacing-2xl;
+  overflow-x: auto;
+
+  @include media-md {
+    padding: 0 $spacing-lg;
+  }
+}
+
+.tab {
+  @include button-reset;
+  flex: 1;
+  min-width: 120px;
+  padding: $spacing-md 0;
+  font-size: $font-size-sm;
+  color: $text-secondary;
+  cursor: pointer;
+  @include transition;
+  border-bottom: 3px solid transparent;
+  position: relative;
+  text-align: center;
+
+  &:hover {
+    color: $heading;
+  }
+
+  &.active {
+    color: $primary;
+    border-bottom-color: $primary;
+  }
+
+  @include media-md {
+    font-size: 12px;
+  }
+}
+
+.tabContent {
+  background-color: $white;
+  border-radius: 0 0 $radius-lg $radius-lg;
+  padding: $spacing-2xl;
+  box-shadow: $shadow-sm;
+}
+
+.contentPlaceholder {
+  text-align: center;
+  color: $text-secondary;
+  padding: $spacing-2xl;
+}
+
+.generalDetails {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2xl;
+}
+
+.section {
+  border-bottom: 1px solid $border;
+  padding-bottom: $spacing-2xl;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.sectionTitle {
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+  color: $heading;
+  margin: 0 0 $spacing-2xl 0;
+  text-transform: capitalize;
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-2xl;
+
+  @include media-lg {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include media-md {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include media-sm {
+    grid-template-columns: 1fr;
+  }
+}
+
+.infoField {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.fieldLabel {
+  font-size: $font-size-xs;
+  color: $text-secondary;
+  font-weight: $font-weight-medium;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.fieldValue {
+  font-size: $font-size-sm;
+  color: $heading;
+  margin: 0;
+  font-weight: $font-weight-medium;
+}
+
+.guarantorCard {
+  background-color: $bg-light;
+  padding: $spacing-lg;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-lg;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+

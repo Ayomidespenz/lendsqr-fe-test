@@ -1,0 +1,192 @@
+@import '../styles/variables.scss';
+@import '../styles/mixins.scss';
+
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  background-color: $white;
+  border-right: 1px solid $border;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  @include transition(width);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+
+  &.collapsed {
+    width: 80px;
+  }
+
+  @include media-md {
+    position: absolute;
+    width: 250px;
+    
+    &.collapsed {
+      width: 70px;
+    }
+  }
+}
+
+// Logo
+.logo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-lg;
+  border-bottom: 1px solid $border;
+  min-height: 70px;
+
+  .logoImage {
+    height: 28px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .logoText {
+    font-weight: $font-weight-bold;
+    color: $heading;
+    font-size: $font-size-lg;
+  }
+}
+
+// Organization Switcher
+.organizationSwitcher {
+  padding: $spacing-lg;
+  border-bottom: 1px solid $border;
+
+  .select {
+    width: 100%;
+    padding: $spacing-md;
+    border: 1px solid $border;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    color: $text-primary;
+    background-color: $white;
+    cursor: pointer;
+    @include transition;
+
+    &:hover {
+      border-color: $primary;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $primary;
+    }
+  }
+}
+
+// Navigation
+.nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-lg 0;
+}
+
+.section {
+  margin-bottom: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  color: $text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0 $spacing-lg $spacing-sm $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menuItem {
+  @include button-reset;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  color: $text-primary;
+  font-size: $font-size-base;
+  @include transition(all);
+  position: relative;
+
+  &:hover {
+    background-color: $bg-light;
+    color: $primary;
+
+    .icon {
+      color: $primary;
+    }
+  }
+
+  &.active {
+    color: $primary;
+    background-color: rgba($primary, 0.1);
+    border-left: 3px solid $primary;
+    padding-left: calc($spacing-lg - 3px);
+
+    .icon {
+      color: $primary;
+    }
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: $text-secondary;
+    @include transition;
+  }
+
+  .label {
+    @include truncate;
+    flex: 1;
+  }
+}
+
+// Collapse Toggle
+.collapseToggle {
+  @include button-reset;
+  padding: $spacing-md;
+  background-color: $bg-light;
+  color: $text-secondary;
+  border-top: 1px solid $border;
+  @include flex-center;
+  @include transition;
+  cursor: pointer;
+  font-size: $font-size-lg;
+
+  &:hover {
+    background-color: darken($bg-light, 5%);
+    color: $primary;
+  }
+}
+
+// Scrollbar styling
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: $border;
+  border-radius: $radius-full;
+
+  &:hover {
+    background: $text-secondary;
+  }
+}

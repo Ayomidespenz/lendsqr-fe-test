@@ -1,4 +1,5 @@
-import { InputHTMLAttributes, useState } from 'react';
+import type { InputHTMLAttributes } from 'react';
+import { useState } from 'react';
 import styles from './Input.module.scss';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {

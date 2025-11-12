@@ -1,0 +1,109 @@
+@import '../styles/variables.scss';
+@import '../styles/mixins.scss';
+
+.tableWrapper {
+  background-color: $white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.th {
+  background-color: $bg-light;
+  padding: $spacing-md $spacing-lg;
+  text-align: left;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+  font-size: $font-size-sm;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid $border;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.sortIcon {
+  opacity: 0.5;
+  font-size: $font-size-xs;
+}
+
+.filterIcon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  opacity: 0.6;
+  transition: opacity $transition-fast;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.tr {
+  border-bottom: 1px solid $border;
+  @include transition;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $bg-light;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.td {
+  padding: $spacing-md $spacing-lg;
+  color: $text-primary;
+  font-size: $font-size-sm;
+  vertical-align: middle;
+}
+
+.actionBtn {
+  @include button-reset;
+  padding: $spacing-sm;
+  color: $text-secondary;
+  font-size: $font-size-lg;
+  cursor: pointer;
+  @include transition;
+
+  &:hover {
+    color: $primary;
+    background-color: rgba($primary, 0.1);
+    border-radius: $radius-md;
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: $spacing-2xl;
+  color: $text-secondary;
+}
+
+.loading {
+  padding: $spacing-2xl;
+  text-align: center;
+  color: $text-secondary;
+}
+
+/* Responsive */
+@include media-md {
+  .table {
+    font-size: $font-size-xs;
+  }
+
+  .th,
+  .td {
+    padding: $spacing-sm $spacing-md;
+  }
+}
