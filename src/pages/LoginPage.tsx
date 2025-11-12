@@ -63,32 +63,48 @@ export const LoginPage = () => {
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
+  if (!validateForm()) return;
 
-    setIsLoading(true);
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+  setIsLoading(true);
+  setErrors({});
 
-      // Mock authentication - store token in localStorage
+  try {
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Mock user credentials
+    const MOCK_USER = {
+      email: 'admin@lendsqr.com',
+      password: 'password123'
+    };
+
+    if (
+      formData.email === MOCK_USER.email &&
+      formData.password === MOCK_USER.password
+    ) {
+      // Mock successful login
       const mockToken = `token_${Date.now()}`;
       localStorage.setItem('auth_token', mockToken);
       localStorage.setItem('user_email', formData.email);
 
-      // Navigate to dashboard
       navigate('/dashboard');
-    } catch (error) {
+    } else {
+      // Wrong credentials
       setErrors({
-        general: 'An error occurred during login. Please try again.',
+        general: 'Invalid email or password. Please try again.',
       });
-    } finally {
-      setIsLoading(false);
     }
-  };
+  } catch {
+    setErrors({
+      general: 'An error occurred during login. Please try again.',
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const handleForgotPassword = () => {
     navigate('/forgot-password');
