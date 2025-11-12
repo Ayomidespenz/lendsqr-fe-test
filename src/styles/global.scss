@@ -1,0 +1,97 @@
+@import './variables.scss';
+@import './mixins.scss';
+
+// ============================================
+// GLOBAL STYLES
+// ============================================
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: $font-family-primary;
+  font-size: $font-size-base;
+  line-height: $line-height-normal;
+  color: $text-primary;
+  background-color: $white;
+}
+
+// Typography
+h1, h2, h3, h4, h5, h6 {
+  color: $heading;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-tight;
+  margin: 0;
+}
+
+h1 {
+  font-size: $font-size-2xl;
+}
+
+h2 {
+  font-size: $font-size-xl;
+}
+
+h3 {
+  font-size: $font-size-lg;
+}
+
+h4 {
+  font-size: $font-size-base;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: $primary;
+  text-decoration: none;
+  @include transition;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+// Inputs & Buttons
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button {
+  @include button-reset;
+}
+
+// Images
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+// Utility classes
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 $spacing-lg;
+
+  @include media-md {
+    padding: 0 $spacing-md;
+  }
+
+  @include media-sm {
+    padding: 0 $spacing-sm;
+  }
+}

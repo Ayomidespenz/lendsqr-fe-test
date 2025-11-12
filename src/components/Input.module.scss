@@ -1,0 +1,98 @@
+@import '../styles/variables.scss';
+@import '../styles/mixins.scss';
+
+.inputWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.label {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $text-primary;
+}
+
+.inputContainer {
+  position: relative;
+  @include flex-center;
+}
+
+.icon {
+  position: absolute;
+  left: $spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text-secondary;
+  pointer-events: none;
+}
+
+.input {
+  @include input-reset;
+  width: 100%;
+  padding: $spacing-md;
+  padding-left: $spacing-md;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  font-size: $font-size-base;
+  color: $text-primary;
+  background-color: $white;
+  @include transition(border-color);
+
+  &::placeholder {
+    color: $text-secondary;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: $primary;
+  }
+
+  &:focus-visible {
+    border-color: $primary;
+    outline: none;
+  }
+
+  &:disabled {
+    background-color: $bg-light;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &.error {
+    border-color: $error;
+
+    &:focus-visible {
+      border-color: $error;
+    }
+  }
+}
+
+.toggleButton {
+  position: absolute;
+  right: $spacing-md;
+  background: none;
+  border: none;
+  color: $primary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  cursor: pointer;
+  padding: 0;
+  @include transition;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary;
+    outline-offset: 2px;
+  }
+}
+
+.errorMessage {
+  font-size: $font-size-xs;
+  color: $error;
+  margin-top: -$spacing-sm;
+}
