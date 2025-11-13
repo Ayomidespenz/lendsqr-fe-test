@@ -45,34 +45,60 @@ export interface UserDetails extends User {
   }>;
 }
 
-// Mock API Service
-const MOCK_API_URL = 'https://api.mockapi.io/api/lendsqr/users';
+// API Configuration
+const API_URL = 'http://localhost:4000/users';
 const STORAGE_KEY = 'lendsqr_users';
 const USER_DETAILS_KEY = 'lendsqr_user_details_';
 
-// Generate realistic user data
-function generateMockUsers(count: number): User[] {
-  const organizations = ['Lendsqr', 'LendStart', 'Fintech Pro', 'Credit Hub', 'MoneyFlow', 'FastCredit', 'Trust Finance', 'Capital Rise'];
-  const statuses: Array<'active' | 'inactive' | 'pending' | 'blacklisted'> = ['active', 'inactive', 'pending', 'blacklisted'];
-  const users: User[] = [];
+// Transform raw user data from API to User interface
+interface RawUser {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  status: 'active' | 'inactive' | 'pending';
+  organization: string;
+  dateJoined: string;
+}
 
-  for (let i = 1; i <= count; i++) {
-    users.push({
-      id: String(i),
-      organization: organizations[Math.floor(Math.random() * organizations.length)],
-      username: `user_${i}`,
-      email: `user${i}@email.com`,
-      phoneNumber: `0${Math.floor(Math.random() * 9) + 1}${Math.floor(Math.random() * 10000000000).toString().padStart(10, '0')}`,
-      dateJoined: new Date(2020, Math.floor(Math.random() * 4), Math.floor(Math.random() * 28) + 1).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      }),
-      status: statuses[Math.floor(Math.random() * statuses.length)],
-    });
+function transformUser(rawUser: RawUser): User {
+  const nameParts = rawUser.name.trim().split(' ');
+  const firstName = nameParts[0];
+  const lastName = nameParts.slice(1).join(' ') || nameParts[0];
+  const username = `${firstName.toLowerCase()}_${lastName.toLowerCase().replace(/\s+/g, '_')}`;
+
+  return {
+    id: String(rawUser.id),
+    organization: rawUser.organization,
+    username: username,
+    email: rawUser.email,
+    phoneNumber: rawUser.phone,
+    dateJoined: rawUser.dateJoined,
+    status: rawUser.status as 'active' | 'inactive' | 'pending',
+  };
+}
+
+// Fetch users from API
+async function fetchUsersFromAPI(): Promise<User[]> {
+  try {
+    console.log('Fetching users from API:', API_URL);
+    const response = await fetch(API_URL);
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`);
+    }
+    const data = await response.json();
+    console.log('API Response:', data);
+    // Handle both array and object with 'users' key
+    const rawUsers = Array.isArray(data) ? data : data.users || [];
+    console.log('Raw users count:', rawUsers.length);
+    const transformedUsers = rawUsers.map(transformUser);
+    console.log('Transformed users count:', transformedUsers.length);
+    console.log('Sample user:', transformedUsers[0]);
+    return transformedUsers;
+  } catch (error) {
+    console.error('Error fetching users from API:', error);
+    throw error;
   }
-
-  return users;
 }
 
 // Generate detailed user information
@@ -129,22 +155,20 @@ export const userApi = {
   // Get all users
   async getUsers(): Promise<User[]> {
     try {
-      // Check localStorage first
-      const cached = localStorage.getItem(STORAGE_KEY);
-      if (cached) {
-        return JSON.parse(cached);
-      }
-
-      // Generate mock users and cache them
-      const mockUsers = generateMockUsers(500);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(mockUsers));
-      return mockUsers;
+      // Always fetch fresh data from API
+      const users = await fetchUsersFromAPI();
+      // Cache the result
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+      return users;
     } catch (error) {
       console.error('Error fetching users:', error);
-      // Fallback to generating fresh data
-      const mockUsers = generateMockUsers(500);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(mockUsers));
-      return mockUsers;
+      // Only use cache as fallback if API fails
+      const cached = localStorage.getItem(STORAGE_KEY);
+      if (cached) {
+        console.log('Using cached data as fallback');
+        return JSON.parse(cached);
+      }
+      throw error;
     }
   },
 
@@ -208,10 +232,16 @@ export const userApi = {
     }
   },
 
+  // Clear cache
+  clearCache(): void {
+    localStorage.removeItem(STORAGE_KEY);
+  },
+
   // Mock logout
   logout(): void {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_email');
+    this.clearCache();
   },
 
   // Check if user is authenticated
@@ -276,3 +306,14 @@ export const useUserDetails = (userId: string) => {
 
   return { userDetails, loading, error, saveDetails: userApi.saveUserDetails };
 };
+
+// Export for debugging
+if (typeof window !== 'undefined') {
+  (window as any).lendsqrApi = {
+    clearCache: () => {
+      userApi.clearCache();
+      console.log('Cache cleared! Refresh page to fetch fresh data from API.');
+    },
+    getUsers: () => userApi.getUsers(),
+  };
+}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../components/DashboardLayout';
+import { useUsers } from '../services/userApi';
 import styles from './UserDetailsPage.module.scss';
 
 type TabType = 'general' | 'documents' | 'bank' | 'loans' | 'savings' | 'app';
@@ -9,48 +10,90 @@ export const UserDetailsPage = () => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>('general');
+  const { users, loading, error } = useUsers();
 
-  // Extended user data with personal, education, employment, social, and guarantor info
-  const userDetails = {
-    // Personal Information
-    fullName: 'Grace Effiom',
-    phoneNumber: '07060780922',
-    emailAddress: 'grace@gmail.com',
-    bvn: '07060780922',
-    gender: 'Female',
-    maritalStatus: 'Single',
-    children: 'None',
-    typeOfResidence: "Parent's Apartment",
+  // Find the user from the users list
+  const userFromList = users.find(u => u.id === userId);
+
+  // Extended user data with generated details
+  const userDetails = userFromList ? {
+    // Personal Information (from API)
+    fullName: `${userFromList.username.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`,
+    phoneNumber: userFromList.phoneNumber,
+    emailAddress: userFromList.email,
+    bvn: `${Math.floor(Math.random() * 9000000000) + 1000000000}`,
+    gender: Math.random() > 0.5 ? 'Male' : 'Female',
+    maritalStatus: ['Single', 'Married', 'Divorced'][Math.floor(Math.random() * 3)],
+    children: Math.random() > 0.5 ? 'None' : `${Math.floor(Math.random() * 5) + 1}`,
+    typeOfResidence: ["Parent's Apartment", 'Own House', 'Rented Apartment', 'Office'][Math.floor(Math.random() * 4)],
 
     // Education and Employment
-    levelOfEducation: 'B.Sc',
-    employmentStatus: 'Employed',
-    sectorOfEmployment: 'FinTech',
-    durationOfEmployment: '2 years',
-    officeEmail: 'grace@lendsqr.com',
-    monthlyIncome: '₦200,000.00 - ₦400,000.00',
-    loanRepayment: '40,000',
+    levelOfEducation: ['B.Sc', 'M.Sc', 'HND', 'ND', 'Diploma'][Math.floor(Math.random() * 5)],
+    employmentStatus: ['Employed', 'Self-employed', 'Unemployed'][Math.floor(Math.random() * 3)],
+    sectorOfEmployment: ['FinTech', 'Banking', 'Technology', 'Retail', 'Healthcare', 'Education'][Math.floor(Math.random() * 6)],
+    durationOfEmployment: `${Math.floor(Math.random() * 20) + 1} years`,
+    officeEmail: `${userFromList.username}@lendsqr.com`,
+    monthlyIncome: `₦${(Math.random() * 1000000).toLocaleString('en-NG')} - ₦${(Math.random() * 1000000 + 500000).toLocaleString('en-NG')}`,
+    loanRepayment: `${Math.floor(Math.random() * 500000)}`,
 
     // Socials
-    twitter: '@grace_effiom',
-    facebook: 'Grace Effiom',
-    instagram: '@grace_effiom',
+    twitter: `@${userFromList.username}`,
+    facebook: userFromList.username,
+    instagram: `@${userFromList.username}`,
 
     // Guarantors
     guarantors: [
       {
-        fullName: 'Debby Ogana',
-        phoneNumber: '07060780922',
-        emailAddress: 'debby@gmail.com',
-        relationship: 'Sister',
+        fullName: 'John Doe',
+        phoneNumber: '08012345678',
+        emailAddress: 'john@gmail.com',
+        relationship: 'Brother',
       },
       {
-        fullName: 'Debby Ogana',
-        phoneNumber: '07060780922',
-        emailAddress: 'debby@gmail.com',
+        fullName: 'Jane Smith',
+        phoneNumber: '07012345678',
+        emailAddress: 'jane@gmail.com',
         relationship: 'Sister',
       },
     ],
+  } : {
+    fullName: 'N/A',
+    phoneNumber: 'N/A',
+    emailAddress: 'N/A',
+    bvn: 'N/A',
+    gender: 'N/A',
+    maritalStatus: 'N/A',
+    children: 'N/A',
+    typeOfResidence: 'N/A',
+    levelOfEducation: 'N/A',
+    employmentStatus: 'N/A',
+    sectorOfEmployment: 'N/A',
+    durationOfEmployment: 'N/A',
+    officeEmail: 'N/A',
+    monthlyIncome: 'N/A',
+    loanRepayment: 'N/A',
+    twitter: 'N/A',
+    facebook: 'N/A',
+    instagram: 'N/A',
+    guarantors: [],
+  };
+
+  const user = userFromList ? {
+    id: userFromList.id,
+    firstName: userDetails.fullName.split(' ')[0],
+    lastName: userDetails.fullName.split(' ').slice(1).join(' ') || userDetails.fullName,
+    userTierId: `LSQF${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+    tier: Math.floor(Math.random() * 3) + 1,
+    accountBalance: `₦${(Math.random() * 1000000).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+    accountNumber: `${Math.floor(Math.random() * 9000000000) + 1000000000}/Providus Bank`,
+  } : {
+    id: 'N/A',
+    firstName: 'N/A',
+    lastName: 'N/A',
+    userTierId: 'N/A',
+    tier: 0,
+    accountBalance: 'N/A',
+    accountNumber: 'N/A',
   };
 
   const handleBack = () => {
@@ -65,15 +108,35 @@ export const UserDetailsPage = () => {
     console.log('Activate user:', userDetails.fullName);
   };
 
-  const user = {
-    id: userId || '1',
-    firstName: userDetails.fullName.split(' ')[0],
-    lastName: userDetails.fullName.split(' ')[1],
-    userTierId: 'LSQFf587g90',
-    tier: 3,
-    accountBalance: '₦200,000.00',
-    accountNumber: '9912345678/Providus Bank',
-  };
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className={styles.userDetails}>
+          <div className={styles.header}>
+            <button className={styles.backBtn} onClick={handleBack}>
+              ← Back to Users
+            </button>
+            <h1 className={styles.title}>Loading user details...</h1>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (error || !userFromList) {
+    return (
+      <DashboardLayout>
+        <div className={styles.userDetails}>
+          <div className={styles.header}>
+            <button className={styles.backBtn} onClick={handleBack}>
+              ← Back to Users
+            </button>
+            <h1 className={styles.title}>{error || `User with ID ${userId} not found`}</h1>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
