@@ -208,6 +208,60 @@ export const userApi = {
     }
   },
 
+  // Blacklist a user
+  async blacklistUser(userId: string): Promise<boolean> {
+    try {
+      console.log(`Blacklisting user: ${userId}`);
+      // Call API to blacklist user
+      const response = await fetch(`http://localhost:4000/users/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'blacklisted' }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to blacklist user: ${response.statusText}`);
+      }
+
+      // Clear cache to force refresh
+      localStorage.removeItem(STORAGE_KEY);
+      console.log(`User ${userId} blacklisted successfully`);
+      return true;
+    } catch (error) {
+      console.error('Error blacklisting user:', error);
+      return false;
+    }
+  },
+
+  // Activate a user
+  async activateUser(userId: string): Promise<boolean> {
+    try {
+      console.log(`Activating user: ${userId}`);
+      // Call API to activate user
+      const response = await fetch(`http://localhost:4000/users/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'active' }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to activate user: ${response.statusText}`);
+      }
+
+      // Clear cache to force refresh
+      localStorage.removeItem(STORAGE_KEY);
+      console.log(`User ${userId} activated successfully`);
+      return true;
+    } catch (error) {
+      console.error('Error activating user:', error);
+      return false;
+    }
+  },
+
   // Mock login
   async login(email: string, password: string): Promise<{ token: string; userId: string } | null> {
     try {

@@ -20,6 +20,7 @@ interface TableProps {
   onViewDetails?: (row: TableRow) => void;
   onBlacklistUser?: (row: TableRow) => void;
   onActivateUser?: (row: TableRow) => void;
+  onFilterClick?: (columnKey: string, position: { top: number; left: number }) => void;
   loading?: boolean;
 }
 
@@ -30,6 +31,7 @@ export const Table = ({
   onViewDetails, 
   onBlacklistUser, 
   onActivateUser,
+  onFilterClick,
   loading 
 }: TableProps) => {
   if (loading) {
@@ -60,7 +62,22 @@ export const Table = ({
               <th key={column.key} className={styles.th}>
                 <div className={styles.headerContent}>
                   <span>{column.label}</span>
-                  <img src={FilterIcon} alt="Filter" className={styles.filterIcon} />
+                  <img 
+                    src={FilterIcon} 
+                    alt="Filter" 
+                    className={styles.filterIcon}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const rect = (e.currentTarget.closest('th') as HTMLElement)?.getBoundingClientRect();
+                      if (rect) {
+                        onFilterClick?.(column.key, { 
+                          top: rect.bottom + 10, 
+                          left: rect.left 
+                        });
+                      }
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  />
                 </div>
               </th>
             ))}

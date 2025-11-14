@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { Table } from '../components/Table';
 import { Pagination } from '../components/Pagination';
 import { StatusBadge } from '../components/StatusBadge';
-import { useUsers } from '../services/userApi';
+import { FilterModal, type FilterCriteria } from '../components/FilterModal';
+import { useUsers, userApi } from '../services/userApi';
 import styles from './DashboardPage.module.scss';
 import Icon4 from '../assets/icon(4).png';
 import Icon5 from '../assets/icon(5).png';
@@ -15,14 +17,32 @@ export const DashboardPage = () => {
   const navigate = useNavigate();
   const { users, loading, error } = useUsers();
   const [currentPage, setCurrentPage] = useState(1);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filterPosition, setFilterPosition] = useState<{ top: number; left: number }>({ top: 60, left: 0 });
+  const [filters, setFilters] = useState<FilterCriteria>({});
+  
   const itemsPerPage = 100;
-  const totalItems = users.length;
+
+  // Filter users based on criteria
+  const filteredUsers = useMemo(() => {
+    return users.filter(user => {
+      if (filters.organization && user.organization !== filters.organization) return false;
+      if (filters.username && !user.username.toLowerCase().includes(filters.username.toLowerCase())) return false;
+      if (filters.email && !user.email.toLowerCase().includes(filters.email.toLowerCase())) return false;
+      if (filters.phoneNumber && !user.phoneNumber.includes(filters.phoneNumber)) return false;
+      if (filters.status && user.status !== filters.status) return false;
+      if (filters.dateJoined && user.dateJoined !== filters.dateJoined) return false;
+      return true;
+    });
+  }, [users, filters]);
+
+  const totalItems = filteredUsers.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  // Paginate users
+  // Paginate filtered users
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedUsers = users.slice(startIndex, endIndex);
+  const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
   const columns = [
     {
@@ -66,15 +86,82 @@ export const DashboardPage = () => {
     navigate(`/dashboard/users/${row.id}`);
   };
 
-  const handleBlacklistUser = (row: any) => {
-    console.log('Blacklist user:', row.username);
-    // Call API to blacklist user
-  };
+  const handleBlacklistUser = useCallback(async (row: any) => {
+    try {
+      const success = await userApi.blacklistUser(row.id);
+      if (success) {
+        toast.success(`User ${row.username} has been blacklisted`, {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+        // Refresh page to show updated data after toast shows
+        setTimeout(() => window.location.reload(), 3500);
+      } else {
+        toast.error(`Failed to blacklist user ${row.username}`, {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('An error occurred while blacklisting the user', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
+    }
+  }, []);
 
-  const handleActivateUser = (row: any) => {
-    console.log('Activate user:', row.username);
-    // Call API to activate user
-  };
+  const handleActivateUser = useCallback(async (row: any) => {
+    try {
+      const success = await userApi.activateUser(row.id);
+      if (success) {
+        toast.success(`User ${row.username} has been activated`, {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+        // Refresh page to show updated data after toast shows
+        setTimeout(() => window.location.reload(), 3500);
+      } else {
+        toast.error(`Failed to activate user ${row.username}`, {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('An error occurred while activating the user', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
+    }
+  }, []);
+
+  const handleFilter = useCallback((filterCriteria: FilterCriteria) => {
+    setFilters(filterCriteria);
+    setCurrentPage(1);
+  }, []);
+
+  const handleFilterIconClick = useCallback((_columnKey: string, position: { top: number; left: number }) => {
+    // Position dropdown centered relative to click position
+    const dropdownWidth = 320;
+    const padding = 20;
+    
+    // Center the dropdown on the clicked position
+    let leftPos = position.left - (dropdownWidth / 2);
+    
+    // Ensure dropdown stays within viewport bounds
+    if (leftPos < padding) {
+      leftPos = padding;
+    } else if (leftPos + dropdownWidth > window.innerWidth - padding) {
+      leftPos = window.innerWidth - dropdownWidth - padding;
+    }
+    
+    setFilterPosition({ 
+      top: position.top + 38, 
+      left: leftPos
+    });
+    setIsFilterOpen(true);
+  }, []);
 
   if (loading) {
     return (
@@ -145,7 +232,7 @@ export const DashboardPage = () => {
               </div>
               <div className={styles.statContent}>
                 <p className={styles.statLabel}>USERS WITH LOANS</p>
-                <p className={styles.statValue}>12,453</p>
+                <p className={styles.statValue}>{users.filter(u => u.status === 'inactive').length.toLocaleString()}</p>
               </div>
             </div>
 
@@ -156,7 +243,7 @@ export const DashboardPage = () => {
               </div>
               <div className={styles.statContent}>
                 <p className={styles.statLabel}>USERS WITH SAVINGS</p>
-                <p className={styles.statValue}>102,453</p>
+                <p className={styles.statValue}>{users.filter(u => u.status === 'pending').length.toLocaleString()}</p>
               </div>
             </div>
           </div>
@@ -169,6 +256,7 @@ export const DashboardPage = () => {
               onViewDetails={handleViewDetails}
               onBlacklistUser={handleBlacklistUser}
               onActivateUser={handleActivateUser}
+              onFilterClick={handleFilterIconClick}
             />
             <Pagination 
               currentPage={currentPage}
@@ -178,8 +266,18 @@ export const DashboardPage = () => {
               totalItems={totalItems}
             />
           </div>
+
         </div>
       </div>
+
+      <FilterModal 
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+        onFilter={handleFilter}
+        organizations={[...new Set(users.map(u => u.organization))]}
+        statuses={[...new Set(users.map(u => u.status))]}
+        filterPosition={filterPosition}
+      />
     </DashboardLayout>
   );
 };

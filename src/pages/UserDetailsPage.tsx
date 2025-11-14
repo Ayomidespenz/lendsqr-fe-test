@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { toast } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../components/DashboardLayout';
-import { useUsers } from '../services/userApi';
+import { useUsers, userApi } from '../services/userApi';
 import styles from './UserDetailsPage.module.scss';
 
 type TabType = 'general' | 'documents' | 'bank' | 'loans' | 'savings' | 'app';
@@ -100,13 +101,57 @@ export const UserDetailsPage = () => {
     navigate('/dashboard');
   };
 
-  const handleBlacklist = () => {
-    console.log('Blacklist user:', userDetails.fullName);
-  };
+  const handleBlacklist = useCallback(async () => {
+    if (!userFromList) return;
+    try {
+      const success = await userApi.blacklistUser(userFromList.id);
+      if (success) {
+        toast.success(`User ${userDetails.fullName} has been blacklisted`, {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+        // Refresh page after toast shows
+        setTimeout(() => window.location.reload(), 3500);
+      } else {
+        toast.error(`Failed to blacklist user ${userDetails.fullName}`, {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('An error occurred while blacklisting the user', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
+    }
+  }, [userFromList, userDetails.fullName]);
 
-  const handleActivate = () => {
-    console.log('Activate user:', userDetails.fullName);
-  };
+  const handleActivate = useCallback(async () => {
+    if (!userFromList) return;
+    try {
+      const success = await userApi.activateUser(userFromList.id);
+      if (success) {
+        toast.success(`User ${userDetails.fullName} has been activated`, {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+        // Refresh page after toast shows
+        setTimeout(() => window.location.reload(), 3500);
+      } else {
+        toast.error(`Failed to activate user ${userDetails.fullName}`, {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('An error occurred while activating the user', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
+    }
+  }, [userFromList, userDetails.fullName]);
 
   if (loading) {
     return (

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Navbar.module.scss';
 import SearchIcon from '../assets/search.png';
+import DefaultAvatar from '../assets/image 4.png';
 
 interface NavbarProps {
   userName?: string;
@@ -73,7 +74,7 @@ export const Navbar = ({ userName = 'Adedoyin', userAvatar, onLogout }: NavbarPr
               aria-label="User menu"
             >
               <img
-                src={userAvatar || 'https://via.placeholder.com/40'}
+                src={userAvatar || DefaultAvatar}
                 alt={userName}
                 className={styles.avatar}
               />
