@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Navbar.module.scss';
 import SearchIcon from '../assets/search.png';
 import DefaultAvatar from '../assets/image 4.png';
+import BellIcon from '../assets/bellIcon.png'
 
 interface NavbarProps {
   userName?: string;
@@ -63,7 +64,7 @@ export const Navbar = ({ userName = 'Adedoyin', userAvatar, onLogout }: NavbarPr
           </a>
 
           <button className={styles.iconButton} aria-label="Notifications">
-            🔔
+            <img src={BellIcon} alt="Bell"  style={{marginTop:"22px"}}/>,
           </button>
 
           {/* User Profile Dropdown */}

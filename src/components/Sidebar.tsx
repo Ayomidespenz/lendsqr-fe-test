@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styles from './Sidebar.module.scss';
 import Logo from '../assets/Group.svg';
+import SwitchIcon from '../assets/switch.png';
 
 interface SidebarItem {
   id: string;
@@ -47,11 +48,14 @@ export const Sidebar = ({ items, activeItem, onItemClick, isCollapsed = false }:
       {/* Organization Switcher */}
       {!collapsed && (
         <div className={styles.organizationSwitcher}>
-          <select className={styles.select}>
-            <option>Switch Organization</option>
-            <option>Organization 1</option>
-            <option>Organization 2</option>
-          </select>
+          <div className={styles.switcherWrapper}>
+            <img src={SwitchIcon} alt="Switch" className={styles.switchIcon} />
+            <select className={styles.select}>
+              <option>Switch Organization</option>
+              <option>Organization 1</option>
+              <option>Organization 2</option>
+            </select>
+          </div>
         </div>
       )}
 

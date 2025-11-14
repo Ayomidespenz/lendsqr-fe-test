@@ -68,7 +68,18 @@ export const DashboardPage = () => {
     {
       key: 'dateJoined',
       label: 'Date Joined',
-      render: (value: string) => <span>{value}</span>,
+      render: (value: string) => {
+        const date = new Date(value);
+        const formatted = date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        });
+        return <span>{formatted}</span>;
+      },
     },
     {
       key: 'status',

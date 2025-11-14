@@ -1,4 +1,5 @@
-import { ReactNode, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useState } from 'react';
 import { Navbar } from './Navbar';
 import { Sidebar } from './Sidebar';
 import styles from './DashboardLayout.module.scss';
@@ -29,14 +30,14 @@ const sidebarItems = [
   {
     id: 'dashboard',
     label: 'Dashboard',
-    icon: <img src={DashboardIcon} alt="Dashboard" style={{ width: '20px', height: '20px' }} />,
+    icon: <img src={DashboardIcon} alt="Dashboard" />,
     path: '/dashboard',
     section: 'dashboard',
   },
   {
     id: 'users',
     label: 'Users',
-    icon: <img src={UserIcon} alt="User" style={{ width: '20px', height: '20px' }} />,
+    icon: <img src={UserIcon} alt="User" />,
     
     path: '/dashboard/users',
     section: 'customers',
@@ -44,7 +45,7 @@ const sidebarItems = [
   {
     id: 'guarantors',
     label: 'Guarantors',
-        icon: <img src={GuarantorIcon} alt="Guarantor" style={{ width: '20px', height: '20px' }} />,
+        icon: <img src={GuarantorIcon} alt="Guarantor" />,
 
     path: '/dashboard/guarantors',
     section: 'customers',
@@ -52,22 +53,22 @@ const sidebarItems = [
   {
     id: 'loans',
     label: 'Loans',
-       icon: <img src={LoanIcon} alt="Loan" style={{ width: '20px', height: '20px' }} />,
+       icon: <img src={LoanIcon} alt="Loan" />,
 
     path: '/dashboard/loans',
     section: 'customers',
   },
   {
     id: 'decision-models',
-    icon: <img src={DecisionIcon} alt="Decision" style={{ width: '20px', height: '20px' }} />,
-    
+    label: 'Decision Models',
+    icon: <img src={DecisionIcon} alt="Decision" />,
     path: '/dashboard/decision-models',
     section: 'customers',
   },
   {
     id: 'savings',
     label: 'Savings',
-       icon: <img src={SavingIcon} alt="Saving" style={{ width: '20px', height: '20px' }} />,
+       icon: <img src={SavingIcon} alt="Saving" />,
 
     path: '/dashboard/savings',
     section: 'customers',
@@ -75,7 +76,7 @@ const sidebarItems = [
   {
     id: 'loan-requests',
     label: 'Loan Requests',
-        icon: <img src={LoanRequestIcon} alt="LoanRequest" style={{ width: '20px', height: '20px' }} />,
+        icon: <img src={LoanRequestIcon} alt="LoanRequest" />,
 
     path: '/dashboard/loan-requests',
     section: 'customers',
@@ -83,7 +84,7 @@ const sidebarItems = [
   {
     id: 'whitelist',
     label: 'Whitelist',
-       icon: <img src={WhitelistIcon} alt="Whitelist" style={{ width: '20px', height: '20px' }} />,
+       icon: <img src={WhitelistIcon} alt="Whitelist" />,
 
     path: '/dashboard/whitelist',
     section: 'customers',
@@ -91,7 +92,7 @@ const sidebarItems = [
   {
     id: 'karma',
     label: 'Karma',
-       icon: <img src={KarmaIcon} alt="Karma" style={{ width: '20px', height: '20px' }} />,
+       icon: <img src={KarmaIcon} alt="Karma" />,
 
     path: '/dashboard/karma',
     section: 'customers',
@@ -99,7 +100,7 @@ const sidebarItems = [
   {
     id: 'organization',
     label: 'Organization',
-       icon: <img src={SwitchIcon} alt="Organization" style={{ width: '20px', height: '20px' }} />,
+       icon: <img src={SwitchIcon} alt="Organization" />,
 
     path: '/dashboard/organization',
     section: 'businesses',
@@ -107,7 +108,7 @@ const sidebarItems = [
   {
     id: 'loan-products',
     label: 'Loan Products',
-      icon: <img src={ProductIcon} alt="Product" style={{ width: '20px', height: '20px' }} />,
+      icon: <img src={ProductIcon} alt="Product" />,
 
     path: '/dashboard/loan-products',
     section: 'businesses',
@@ -115,7 +116,7 @@ const sidebarItems = [
   {
     id: 'savings-products',
     label: 'Savings Products',
-     icon: <img src={SavingsProductIcon} alt="Savings" style={{ width: '20px', height: '20px' }} />,
+     icon: <img src={SavingsProductIcon} alt="Savings" />,
 
     path: '/dashboard/savings-products',
     section: 'businesses',
@@ -123,7 +124,7 @@ const sidebarItems = [
   {
     id: 'fees-charges',
     label: 'Fees and Charges',
-    icon: <img src={FeesIcon} alt="Fees" style={{ width: '20px', height: '20px' }} />,
+    icon: <img src={FeesIcon} alt="Fees" />,
     
     path: '/dashboard/fees-charges',
     section: 'businesses',
@@ -131,7 +132,7 @@ const sidebarItems = [
   {
     id: 'transactions',
     label: 'Transactions',
-      icon: <img src={TransactionIcon} alt="Transaction" style={{ width: '20px', height: '20px' }} />,
+      icon: <img src={TransactionIcon} alt="Transaction" />,
 
     path: '/dashboard/transactions',
     section: 'businesses',
@@ -139,7 +140,7 @@ const sidebarItems = [
   {
     id: 'services',
     label: 'Services',
-       icon: <img src={ServiceIcon} alt="Services" style={{ width: '20px', height: '20px' }} />,
+       icon: <img src={ServiceIcon} alt="Services" />,
 
     path: '/dashboard/services',
     section: 'businesses',
@@ -147,7 +148,7 @@ const sidebarItems = [
   {
     id: 'service-account',
     label: 'Service Account',
-       icon: <img src={ServiceAcctIcon} alt="ServiceAcct" style={{ width: '20px', height: '20px' }} />,
+       icon: <img src={ServiceAcctIcon} alt="ServiceAcct" />,
 
     path: '/dashboard/service-account',
     section: 'businesses',
@@ -155,7 +156,7 @@ const sidebarItems = [
   {
     id: 'settlements',
     label: 'Settlements',
-       icon: <img src={SettlementIcon} alt="Settlement" style={{ width: '20px', height: '20px' }} />,
+       icon: <img src={SettlementIcon} alt="Settlement" />,
 
     path: '/dashboard/settlements',
     section: 'businesses',
@@ -163,7 +164,7 @@ const sidebarItems = [
   {
     id: 'reports',
     label: 'Reports',
-        icon: <img src={ReportIcon} alt="Report" style={{ width: '20px', height: '20px' }} />,
+        icon: <img src={ReportIcon} alt="Report" />,
 
     path: '/dashboard/reports',
     section: 'businesses',
@@ -171,7 +172,7 @@ const sidebarItems = [
   {
     id: 'preferences',
     label: 'Preferences',
-       icon: <img src={PreferenceIcon} alt="Preference" style={{ width: '20px', height: '20px' }} />,
+       icon: <img src={PreferenceIcon} alt="Preference" />,
 
     path: '/dashboard/preferences',
     section: 'settings',
@@ -179,7 +180,7 @@ const sidebarItems = [
   {
     id: 'fees-pricing',
     label: 'Fees and Pricing',
-        icon: <img src={PricingIcon} alt="Fees" style={{ width: '20px', height: '20px' }} />,
+        icon: <img src={PricingIcon} alt="Fees" />,
 
     path: '/dashboard/fees-pricing',
     section: 'settings',
@@ -187,7 +188,7 @@ const sidebarItems = [
    {
     id: 'audit-logs',
     label: 'Audit Logs',
-        icon: <img src={AuditIcon} alt="Audit" style={{ width: '20px', height: '20px' }} />,
+        icon: <img src={AuditIcon} alt="Audit" />,
 
     path: '/dashboard/audit-logs',
     section: 'settings',
