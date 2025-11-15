@@ -1,6 +1,44 @@
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
 
+// Backdrop - Only visible on mobile when sidebar is open
+.backdrop {
+  display: none;
+
+  @include media-md {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @include media-sm {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .sidebar {
   width: 280px;
   height: 100vh;
@@ -20,12 +58,68 @@
     width: 80px;
   }
 
-  @include media-md {
-    position: absolute;
+  @include media-lg {
     width: 250px;
     
     &.collapsed {
       width: 70px;
+    }
+  }
+
+  // Mobile: Sidebar as overlay
+  @include media-md {
+    width: 70%;
+    max-width: 280px;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    position: fixed;
+    border-right: 1px solid $border;
+    border-top: none;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 1001;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    margin-bottom: 0;
+
+    &.collapsed {
+      width: 70%;
+      max-width: 280px;
+    }
+
+    // When isOpen class is added
+    &.open {
+      transform: translateX(0);
+    }
+  }
+
+  @include media-sm {
+    width: 70%;
+    max-width: 280px;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    position: fixed;
+    border-right: 1px solid $border;
+    border-top: none;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 1001;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    margin-bottom: 0;
+
+    &.collapsed {
+      width: 70%;
+      max-width: 280px;
+    }
+
+    // When isOpen class is added
+    &.open {
+      transform: translateX(0);
     }
   }
 }
@@ -50,12 +144,20 @@
     color: $heading;
     font-size: $font-size-lg;
   }
+
+  @include media-sm {
+    display: none;
+  }
 }
 
 // Organization Switcher
 .organizationSwitcher {
   padding: $spacing-lg;
   border-bottom: 1px solid $border;
+
+  @include media-sm {
+    display: none;
+  }
 
   .switcherWrapper {
     display: flex;
@@ -110,10 +212,42 @@
   flex: 1;
   overflow-y: auto;
   padding: $spacing-lg 0;
+
+  @include media-md {
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: $spacing-lg 0;
+  }
+
+  @include media-sm {
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: $spacing-lg 0;
+  }
 }
 
 .section {
   margin-bottom: $spacing-lg;
+
+  @include media-md {
+    margin-bottom: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    white-space: normal;
+  }
+
+  @include media-sm {
+    margin-bottom: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    white-space: normal;
+  }
 }
 
 .sectionTitle {
@@ -130,6 +264,18 @@
   list-style: none;
   margin: 0;
   padding: 0;
+
+  @include media-md {
+    display: flex;
+    flex-direction: column;
+    white-space: normal;
+  }
+
+  @include media-sm {
+    display: flex;
+    flex-direction: column;
+    white-space: normal;
+  }
 }
 
 .menuItem {
@@ -146,6 +292,32 @@
   @include transition(all);
   position: relative;
 
+  @include media-md {
+    width: 100%;
+    height: 44px;
+    padding: $spacing-md $spacing-lg;
+    flex-direction: row;
+    font-size: $font-size-base;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+    border-left: 3px solid transparent;
+    border-bottom: none;
+  }
+
+  @include media-sm {
+    width: 100%;
+    height: 44px;
+    padding: $spacing-md $spacing-lg;
+    flex-direction: row;
+    font-size: $font-size-base;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+    border-left: 3px solid transparent;
+    border-bottom: none;
+  }
+
   &:hover {
     background-color: $bg-light;
     color: $primary;
@@ -160,6 +332,20 @@
     background-color: rgba($primary, 0.1);
     border-left: 3px solid $primary;
     padding-left: calc($spacing-lg - 3px);
+
+    @include media-md {
+      background-color: rgba($primary, 0.1);
+      border-left: 3px solid $primary;
+      border-bottom: none;
+      padding-left: calc($spacing-lg - 3px);
+    }
+
+    @include media-sm {
+      background-color: rgba($primary, 0.1);
+      border-left: 3px solid $primary;
+      border-bottom: none;
+      padding-left: calc($spacing-lg - 3px);
+    }
 
     .icon {
       color: $primary;
@@ -205,6 +391,10 @@
   &:hover {
     background-color: darken($bg-light, 5%);
     color: $primary;
+  }
+
+  @include media-sm {
+    display: none;
   }
 }
 

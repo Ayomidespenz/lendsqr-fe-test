@@ -202,24 +202,35 @@ interface DashboardLayoutProps {
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [activeMenuId, setActiveMenuId] = useState('dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleMenuClick = (item: any) => {
     setActiveMenuId(item.id);
-    // Navigate to the path if needed
-    // navigate(item.path);
+    setSidebarOpen(false); // Close sidebar on mobile when clicking item
+  };
+
+  const handleCollapseToggle = (collapsed: boolean) => {
+    setSidebarCollapsed(collapsed);
+  };
+
+  const handleSidebarToggle = () => {
+    setSidebarOpen(!sidebarOpen);
   };
 
   return (
     <div className={styles.layout}>
-      <Navbar userName="Adedoyin" />
+      <Navbar userName="Adedoyin" onSidebarToggle={handleSidebarToggle} sidebarOpen={sidebarOpen} />
       <div className={styles.container}>
         <Sidebar
           items={sidebarItems}
           activeItem={activeMenuId}
           onItemClick={handleMenuClick}
           isCollapsed={sidebarCollapsed}
+          onCollapseToggle={handleCollapseToggle}
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
         />
-        <main className={styles.main}>
+        <main className={`${styles.main} ${sidebarCollapsed ? styles.mainCollapsed : ''}`}>
           {children}
         </main>
       </div>

@@ -16,10 +16,24 @@ interface SidebarProps {
   activeItem?: string;
   onItemClick?: (item: SidebarItem) => void;
   isCollapsed?: boolean;
+  onCollapseToggle?: (collapsed: boolean) => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export const Sidebar = ({ items, activeItem, onItemClick, isCollapsed = false }: SidebarProps) => {
+export const Sidebar = ({ items, activeItem, onItemClick, isCollapsed = false, onCollapseToggle, isOpen = false, onClose }: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(isCollapsed);
+
+  // Update internal state when prop changes
+  const currentCollapsed = collapsed;
+
+  const handleCollapse = () => {
+    const newCollapsed = !currentCollapsed;
+    setCollapsed(newCollapsed);
+    if (onCollapseToggle) {
+      onCollapseToggle(newCollapsed);
+    }
+  };
 
   // Group items by section
   const groupedItems = items.reduce((acc: Record<string, SidebarItem[]>, item) => {
@@ -38,26 +52,36 @@ export const Sidebar = ({ items, activeItem, onItemClick, isCollapsed = false }:
   };
 
   return (
-    <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}>
-      {/* Logo */}
-      <div className={styles.logo}>
-        <img src={Logo} alt="Lendsqr" className={styles.logoImage} />
-        {!collapsed && <span className={styles.logoText}></span>}
-      </div>
-
-      {/* Organization Switcher */}
-      {!collapsed && (
-        <div className={styles.organizationSwitcher}>
-          <div className={styles.switcherWrapper}>
-            <img src={SwitchIcon} alt="Switch" className={styles.switchIcon} />
-            <select className={styles.select}>
-              <option>Switch Organization</option>
-              <option>Organization 1</option>
-              <option>Organization 2</option>
-            </select>
-          </div>
-        </div>
+    <>
+      {/* Backdrop - Only visible on mobile when sidebar is open */}
+      {isOpen && (
+        <div
+          className={styles.backdrop}
+          onClick={onClose}
+          aria-hidden="true"
+        />
       )}
+
+      <aside className={`${styles.sidebar} ${currentCollapsed ? styles.collapsed : ''} ${isOpen ? styles.open : ''}`}>
+        {/* Logo */}
+        <div className={styles.logo}>
+          <img src={Logo} alt="Lendsqr" className={styles.logoImage} />
+          {!currentCollapsed && <span className={styles.logoText}></span>}
+        </div>
+
+        {/* Organization Switcher */}
+        {!currentCollapsed && (
+          <div className={styles.organizationSwitcher}>
+            <div className={styles.switcherWrapper}>
+              <img src={SwitchIcon} alt="Switch" className={styles.switchIcon} />
+              <select className={styles.select}>
+                <option>Switch Organization</option>
+                <option>Organization 1</option>
+                <option>Organization 2</option>
+              </select>
+            </div>
+          </div>
+        )}
 
       {/* Navigation Menu */}
       <nav className={styles.nav}>
@@ -67,7 +91,7 @@ export const Sidebar = ({ items, activeItem, onItemClick, isCollapsed = false }:
 
           return (
             <div key={section} className={styles.section}>
-              {section !== 'general' && section !== 'dashboard' && !collapsed && (
+              {section !== 'general' && section !== 'dashboard' && !currentCollapsed && (
                 <div className={styles.sectionTitle}>{section.toUpperCase()}</div>
               )}
 
@@ -77,10 +101,10 @@ export const Sidebar = ({ items, activeItem, onItemClick, isCollapsed = false }:
                     <button
                       className={`${styles.menuItem} ${activeItem === item.id ? styles.active : ''}`}
                       onClick={() => handleItemClick(item)}
-                      title={collapsed ? item.label : ''}
+                      title={currentCollapsed ? item.label : ''}
                     >
                       <span className={styles.icon}>{item.icon}</span>
-                      {!collapsed && <span className={styles.label}>{item.label}</span>}
+                      {!currentCollapsed && <span className={styles.label}>{item.label}</span>}
                     </button>
                   </li>
                 ))}
@@ -93,11 +117,12 @@ export const Sidebar = ({ items, activeItem, onItemClick, isCollapsed = false }:
       {/* Collapse Toggle */}
       <button
         className={styles.collapseToggle}
-        onClick={() => setCollapsed(!collapsed)}
-        title={collapsed ? 'Expand' : 'Collapse'}
+        onClick={handleCollapse}
+        title={currentCollapsed ? 'Expand' : 'Collapse'}
       >
-        {collapsed ? '→' : '←'}
+        {currentCollapsed ? '→' : '←'}
       </button>
-    </aside>
+      </aside>
+    </>
   );
 };

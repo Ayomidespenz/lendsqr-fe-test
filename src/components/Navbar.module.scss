@@ -21,11 +21,40 @@
 
   @include media-md {
     padding: 0 $spacing-md;
+    gap: $spacing-md;
   }
 
   @include media-sm {
     padding: 0 $spacing-sm;
+    gap: $spacing-sm;
   }
+}
+
+// Hamburger Button - Mobile Only
+.hamburgerBtn {
+  @include button-reset;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  cursor: pointer;
+  gap: 5px;
+  z-index: 100;
+
+  @include media-sm {
+    display: flex;
+  }
+}
+
+.hamburgerLine {
+  width: 24px;
+  height: 2px;
+  background-color: $heading;
+  border-radius: 2px;
+  transition: all 0.3s ease;
 }
 
 // Left Section - Logo
@@ -40,8 +69,8 @@
   align-items: center;
   gap: $spacing-sm;
 
-  @include media-md {
-    display: none; // Hide logo on mobile, sidebar has it
+  @include media-sm {
+    display: none; // Hide logo only on mobile
   }
 }
 
@@ -66,6 +95,10 @@
 .center {
   flex: 1;
   max-width: 400px;
+
+  @include media-sm {
+    display: none; // Hide search only on mobile
+  }
 }
 
 .searchContainer {
@@ -136,15 +169,21 @@
 }
 
 .docLink {
-  color: $primary;
+  color: $heading;
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
+  text-decoration: none;
   @include transition;
+  display: inline-block;
 
   &:hover {
-    opacity: 0.8;
+    color: darken($heading, 10%);
+    text-decoration: underline;
   }
 
+  &:active {
+    color: darken($heading, 15%);
+  }
   @include media-sm {
     display: none;
   }
@@ -163,6 +202,9 @@
     color: $primary;
   }
 
+  @include media-sm {
+    display: none; // Hide notification bell only on mobile
+  }
   &::after {
     content: '';
     position: absolute;
@@ -203,7 +245,7 @@
 
 .userName {
   font-size: $font-size-base;
-  color: $text-primary;
+  color: $heading;
   font-weight: $font-weight-medium;
 
   @include media-sm {
@@ -211,9 +253,10 @@
   }
 }
 
-.dropdown {
-  color: $text-secondary;
-  font-size: $font-size-sm;
+.dropdownIcon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
   @include transition;
 }
 

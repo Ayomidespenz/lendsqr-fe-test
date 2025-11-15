@@ -1,5 +1,8 @@
 import styles from './Table.module.scss';
 import FilterIcon from '../assets/filtericon.png';
+import ViewIcon from '../assets/view.png';
+import BlacklistIcon from '../assets/blacklist.png';
+import ActivateIcon from '../assets/activate.png';
 import { ActionMenu } from './ActionMenu';
 
 export interface TableColumn {
@@ -41,14 +44,17 @@ export const Table = ({
   const getActionItems = (row: TableRow) => [
     {
       label: 'View Details',
+      icon: ViewIcon,
       onClick: () => onViewDetails?.(row),
     },
     {
       label: 'Blacklist User',
+      icon: BlacklistIcon,
       onClick: () => onBlacklistUser?.(row),
     },
     {
       label: 'Activate User',
+      icon: ActivateIcon,
       onClick: () => onActivateUser?.(row),
     },
   ];

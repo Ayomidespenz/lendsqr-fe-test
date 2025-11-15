@@ -6,11 +6,21 @@
   border-radius: $radius-lg;
   box-shadow: $shadow-sm;
   overflow: hidden;
+  overflow-x: auto;
+
+  @include media-sm {
+    border-radius: $radius-md;
+  }
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 600px;
+
+  @include media-sm {
+    font-size: $font-size-xs;
+  }
 }
 
 .th {
@@ -23,6 +33,12 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border-bottom: 1px solid $border;
+  white-space: nowrap;
+
+  @include media-sm {
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-xs;
+  }
 }
 
 .headerContent {

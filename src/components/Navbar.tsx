@@ -3,15 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Navbar.module.scss';
 import SearchIcon from '../assets/search.png';
 import DefaultAvatar from '../assets/image 4.png';
-import BellIcon from '../assets/bellIcon.png'
+import BellIcon from '../assets/bellIcon.png';
+import DropdownIcon from '../assets/dropdown.png';
 
 interface NavbarProps {
   userName?: string;
   userAvatar?: string;
   onLogout?: () => void;
+  onSidebarToggle?: () => void;
+  sidebarOpen?: boolean;
 }
 
-export const Navbar = ({ userName = 'Adedoyin', userAvatar, onLogout }: NavbarProps) => {
+export const Navbar = ({ userName = 'Adedoyin', userAvatar, onLogout, onSidebarToggle, sidebarOpen: _sidebarOpen = false }: NavbarProps) => {
   const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -33,6 +36,17 @@ export const Navbar = ({ userName = 'Adedoyin', userAvatar, onLogout }: NavbarPr
   return (
     <header className={styles.navbar}>
       <div className={styles.container}>
+        {/* Hamburger Button - Mobile Only */}
+        <button
+          className={styles.hamburgerBtn}
+          onClick={onSidebarToggle}
+          aria-label="Toggle sidebar"
+        >
+          <span className={styles.hamburgerLine}></span>
+          <span className={styles.hamburgerLine}></span>
+          <span className={styles.hamburgerLine}></span>
+        </button>
+
         {/* Left Section */}
         <div className={styles.left}>
           <div className={styles.logo}>
@@ -80,7 +94,7 @@ export const Navbar = ({ userName = 'Adedoyin', userAvatar, onLogout }: NavbarPr
                 className={styles.avatar}
               />
               <span className={styles.userName}>{userName}</span>
-              <span className={styles.dropdown}>⌄</span>
+              <img src={DropdownIcon} alt="Dropdown" className={styles.dropdownIcon} />
             </button>
 
             {isProfileOpen && (

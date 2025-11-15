@@ -7,6 +7,10 @@
 
 .header {
   margin-bottom: $spacing-2xl;
+
+  @include media-sm {
+    margin-bottom: $spacing-lg;
+  }
 }
 
 .title {
@@ -14,6 +18,10 @@
   font-weight: $font-weight-bold;
   color: $heading;
   margin-bottom: $spacing-sm;
+
+  @include media-sm {
+    font-size: $font-size-xl;
+  }
 }
 
 .subtitle {
@@ -37,11 +45,13 @@
   }
 
   @include media-md {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-md;
   }
 
   @include media-sm {
     grid-template-columns: 1fr;
+    gap: $spacing-md;
   }
 }
 

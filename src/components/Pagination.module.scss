@@ -12,6 +12,13 @@
   @include media-md {
     flex-direction: column;
     gap: 16px;
+    padding: $spacing-lg;
+  }
+
+  @include media-sm {
+    flex-direction: column;
+    gap: $spacing-md;
+    padding: $spacing-md;
   }
 }
 

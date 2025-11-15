@@ -32,17 +32,32 @@
   align-items: center;
   justify-content: space-between;
   gap: $spacing-lg;
+  flex-wrap: wrap;
+
+  @include media-sm {
+    gap: $spacing-sm;
+  }
 }
 
 .title {
   font-size: $font-size-2xl;
   font-weight: $font-weight-bold;
   color: $heading;
+
+  @include media-sm {
+    font-size: $font-size-xl;
+  }
 }
 
 .actionButtons {
   display: flex;
   gap: $spacing-md;
+  flex-wrap: wrap;
+
+  @include media-sm {
+    gap: $spacing-sm;
+    width: 100%;
+  }
 }
 
 .btn {
@@ -84,6 +99,14 @@
     padding: $spacing-xs $spacing-md;
     font-size: 10px;
   }
+
+  @include media-sm {
+    flex: 1;
+    min-width: 140px;
+    padding: $spacing-xs $spacing-sm;
+    font-size: 9px;
+    min-height: 40px;
+  }
 }
 
 .profileCard {
@@ -100,6 +123,14 @@
   align-items: center;
   gap: 0;
   border-bottom: 1px solid $border;
+  flex-wrap: wrap;
+
+  @include media-sm {
+    padding: $spacing-lg;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-md;
+  }
 }
 
 .avatarSection {
@@ -108,6 +139,14 @@
   gap: $spacing-lg;
   padding-right: $spacing-2xl;
   border-right: 1px solid $border;
+
+  @include media-sm {
+    padding-right: 0;
+    border-right: none;
+    border-bottom: 1px solid $border;
+    padding-bottom: $spacing-lg;
+    width: 100%;
+  }
 }
 
 .avatar {
@@ -122,6 +161,12 @@
   font-weight: $font-weight-bold;
   color: $primary;
   flex-shrink: 0;
+
+  @include media-sm {
+    width: 60px;
+    height: 60px;
+    font-size: $font-size-lg;
+  }
 }
 
 .userInfo {
@@ -185,18 +230,30 @@
   gap: 0;
   flex: 1;
   align-items: center;
+
+  @include media-sm {
+    width: 100%;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
 }
 
 .infoItem {
   display: flex;
   flex-direction: column;
-  // gap: $spacing-xs;
   padding: 0 $spacing-2xl;
   flex: 1;
-  // border-right: 1px solid $border;
 
   &:last-child {
     border-right: none;
+  }
+
+  @include media-sm {
+    padding: 0;
+    width: 100%;
+    border-right: none !important;
+    border-bottom: none !important;
   }
 }
 
@@ -251,6 +308,14 @@
 
   @include media-md {
     font-size: 12px;
+    min-width: 90px;
+    padding: $spacing-sm 0;
+  }
+
+  @include media-sm {
+    font-size: 11px;
+    min-width: 70px;
+    padding: $spacing-xs 0;
   }
 }
 
@@ -259,6 +324,10 @@
   border-radius: 0 0 $radius-lg $radius-lg;
   padding: $spacing-2xl;
   box-shadow: $shadow-sm;
+
+  @include media-sm {
+    padding: $spacing-lg;
+  }
 }
 
 .contentPlaceholder {
@@ -339,6 +408,10 @@
 
   &:last-child {
     margin-bottom: 0;
+  }
+
+  @include media-sm {
+    padding: $spacing-md;
   }
 }
 
