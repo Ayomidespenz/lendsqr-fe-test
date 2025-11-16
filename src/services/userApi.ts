@@ -46,7 +46,7 @@ export interface UserDetails extends User {
 }
 
 // API Configuration
-const API_URL = 'http://localhost:4000/users';
+const DATA_URL = '/data.json'; // Mock data from public folder
 const STORAGE_KEY = 'lendsqr_users';
 const USER_DETAILS_KEY = 'lendsqr_user_details_';
 
@@ -56,7 +56,7 @@ interface RawUser {
   name: string;
   email: string;
   phone: string;
-  status: 'active' | 'inactive' | 'pending';
+  status: 'active' | 'inactive' | 'pending' | 'blacklisted';
   organization: string;
   dateJoined: string;
 }
@@ -74,20 +74,20 @@ function transformUser(rawUser: RawUser): User {
     email: rawUser.email,
     phoneNumber: rawUser.phone,
     dateJoined: rawUser.dateJoined,
-    status: rawUser.status as 'active' | 'inactive' | 'pending',
+    status: (rawUser.status as 'active' | 'inactive' | 'pending' | 'blacklisted') || 'active',
   };
 }
 
-// Fetch users from API
+// Fetch users from mock data
 async function fetchUsersFromAPI(): Promise<User[]> {
   try {
-    console.log('Fetching users from API:', API_URL);
-    const response = await fetch(API_URL);
+    console.log('Fetching users from mock data:', DATA_URL);
+    const response = await fetch(DATA_URL);
     if (!response.ok) {
-      throw new Error(`API Error: ${response.statusText}`);
+      throw new Error(`Failed to load data: ${response.statusText}`);
     }
     const data = await response.json();
-    console.log('API Response:', data);
+    console.log('Data loaded successfully:', data.length, 'users');
     // Handle both array and object with 'users' key
     const rawUsers = Array.isArray(data) ? data : data.users || [];
     console.log('Raw users count:', rawUsers.length);
@@ -96,7 +96,7 @@ async function fetchUsersFromAPI(): Promise<User[]> {
     console.log('Sample user:', transformedUsers[0]);
     return transformedUsers;
   } catch (error) {
-    console.error('Error fetching users from API:', error);
+    console.error('Error fetching users from data:', error);
     throw error;
   }
 }

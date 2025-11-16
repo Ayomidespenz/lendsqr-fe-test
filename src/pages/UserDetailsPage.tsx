@@ -4,6 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { useUsers, userApi } from '../services/userApi';
 import styles from './UserDetailsPage.module.scss';
+import SystemIcon from '../assets/system.png';
+import LogoutIcon from '../assets/logout.png';
 
 type TabType = 'general' | 'documents' | 'bank' | 'loans' | 'savings' | 'app';
 
@@ -183,8 +185,26 @@ export const UserDetailsPage = () => {
     );
   }
 
+  // Additional sidebar items for this page only
+  const userDetailsAdditionalItems = [
+    {
+      id: 'systems-messages',
+      label: 'Systems Messages',
+      icon: <img src={SystemIcon} alt="Systems Messages" />,
+      section: 'settings',
+    },
+  ];
+  
+  // Logout item positioned separately at the bottom
+  const logoutItem = {
+    id: 'logout',
+    label: 'Logout',
+    icon: <img src={LogoutIcon} alt="Logout" />,
+    section: 'settings',
+  };
+
   return (
-    <DashboardLayout>
+    <DashboardLayout additionalSidebarItems={[...userDetailsAdditionalItems, logoutItem]}>
       <div className={styles.userDetails}>
         {/* Header Section */}
         <div className={styles.header}>

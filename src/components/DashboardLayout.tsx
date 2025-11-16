@@ -197,9 +197,16 @@ const sidebarItems = [
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  additionalSidebarItems?: Array<{
+    id: string;
+    label: string;
+    icon: React.ReactNode;
+    path?: string;
+    section?: string;
+  }>;
 }
 
-export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+export const DashboardLayout = ({ children, additionalSidebarItems = [] }: DashboardLayoutProps) => {
   const [activeMenuId, setActiveMenuId] = useState('dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -217,12 +224,15 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  // Combine default items with additional items
+  const allSidebarItems = [...sidebarItems, ...additionalSidebarItems];
+
   return (
     <div className={styles.layout}>
       <Navbar userName="Adedoyin" onSidebarToggle={handleSidebarToggle} sidebarOpen={sidebarOpen} />
       <div className={styles.container}>
         <Sidebar
-          items={sidebarItems}
+          items={allSidebarItems}
           activeItem={activeMenuId}
           onItemClick={handleMenuClick}
           isCollapsed={sidebarCollapsed}

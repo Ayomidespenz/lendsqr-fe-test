@@ -92,7 +92,7 @@ export const Sidebar = ({ items, activeItem, onItemClick, isCollapsed = false, o
           return (
             <div key={section} className={styles.section}>
               {section !== 'general' && section !== 'dashboard' && !currentCollapsed && (
-                <div className={styles.sectionTitle}>{section.toUpperCase()}</div>
+                <div className={styles.sectionTitle}>{section === 'user-actions' ? 'USER ACTIONS' : section.toUpperCase()}</div>
               )}
 
               <ul className={styles.menu}>
