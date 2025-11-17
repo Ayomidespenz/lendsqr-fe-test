@@ -12,7 +12,6 @@ export const Pagination = ({
   currentPage,
   totalPages,
   onPageChange,
-  itemsPerPage = 100,
   totalItems = 0,
 }: PaginationProps) => {
   const getPageNumbers = () => {
