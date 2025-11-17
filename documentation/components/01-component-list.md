@@ -178,7 +178,7 @@ interface NavbarProps {
 import { Navbar } from '@/components/Navbar/Navbar';
 
 <Navbar 
-  userName="John Doe"
+  userName="quadriyusuff"
   onLogout={() => navigate('/login')}
 />
 ```

@@ -62,7 +62,8 @@ interface RawUser {
 }
 
 function transformUser(rawUser: RawUser): User {
-  const nameParts = rawUser.name.trim().split(' ');
+  const name = rawUser.name || 'Unknown User';
+  const nameParts = name.trim().split(' ');
   const firstName = nameParts[0];
   const lastName = nameParts.slice(1).join(' ') || nameParts[0];
   const username = `${firstName.toLowerCase()}_${lastName.toLowerCase().replace(/\s+/g, '_')}`;
@@ -87,10 +88,47 @@ async function fetchUsersFromAPI(): Promise<User[]> {
       throw new Error(`Failed to load data: ${response.statusText}`);
     }
     const data = await response.json();
-    console.log('Data loaded successfully:', data.length, 'users');
-    // Handle both array and object with 'users' key
-    const rawUsers = Array.isArray(data) ? data : data.users || [];
+    console.log('Data loaded successfully:', data.length, 'items');
+    
+    // Handle different data structures
+    let rawUsers: RawUser[] = [];
+    if (Array.isArray(data)) {
+      rawUsers = data.map((entry: any) => {
+        let user = entry;
+        
+        // Unwrap nested item objects
+        while (user && typeof user === 'object' && user.item && !user.name) {
+          user = user.item;
+        }
+        
+        // Extract actual user data if it's still wrapped
+        if (user && user.item && typeof user.item === 'object' && user.item.name) {
+          user = user.item;
+        }
+        
+        // If user is a plain object with name, use it directly
+        if (user && user.name) {
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            status: user.status || 'active',
+            organization: user.organization,
+            dateJoined: user.dateJoined,
+          };
+        }
+        
+        return null;
+      }).filter((user): user is RawUser => user !== null);
+    } else {
+      rawUsers = data.users || [];
+    }
+    
     console.log('Raw users count:', rawUsers.length);
+    if (rawUsers.length > 0) {
+      console.log('Sample raw user:', rawUsers[0]);
+    }
     const transformedUsers = rawUsers.map(transformUser);
     console.log('Transformed users count:', transformedUsers.length);
     console.log('Sample user:', transformedUsers[0]);
@@ -155,14 +193,21 @@ export const userApi = {
   // Get all users
   async getUsers(): Promise<User[]> {
     try {
-      // Always fetch fresh data from API
+      // Check if we have cached data with status changes
+      const cached = localStorage.getItem(STORAGE_KEY);
+      if (cached) {
+        console.log('Using cached users data');
+        return JSON.parse(cached);
+      }
+      
+      // If no cache, fetch fresh data from API
       const users = await fetchUsersFromAPI();
       // Cache the result
       localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
       return users;
     } catch (error) {
       console.error('Error fetching users:', error);
-      // Only use cache as fallback if API fails
+      // Try cache as fallback if API fails
       const cached = localStorage.getItem(STORAGE_KEY);
       if (cached) {
         console.log('Using cached data as fallback');
@@ -212,21 +257,24 @@ export const userApi = {
   async blacklistUser(userId: string): Promise<boolean> {
     try {
       console.log(`Blacklisting user: ${userId}`);
-      // Call API to blacklist user
-      const response = await fetch(`http://localhost:4000/${userId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: 'blacklisted' }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to blacklist user: ${response.statusText}`);
+      
+      // Get all users from cache/API
+      const users = await this.getUsers();
+      const userIndex = users.findIndex(u => u.id === userId);
+      
+      if (userIndex === -1) {
+        throw new Error(`User ${userId} not found`);
       }
-
-      // Clear cache to force refresh
-      localStorage.removeItem(STORAGE_KEY);
+      
+      // Update the user's status in the local array
+      users[userIndex].status = 'blacklisted';
+      
+      // Update cache
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+      
+      // Also clear the user details cache
+      localStorage.removeItem(`${USER_DETAILS_KEY}${userId}`);
+      
       console.log(`User ${userId} blacklisted successfully`);
       return true;
     } catch (error) {
@@ -239,21 +287,24 @@ export const userApi = {
   async activateUser(userId: string): Promise<boolean> {
     try {
       console.log(`Activating user: ${userId}`);
-      // Call API to activate user
-      const response = await fetch(`http://localhost:4000/${userId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: 'active' }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to activate user: ${response.statusText}`);
+      
+      // Get all users from cache/API
+      const users = await this.getUsers();
+      const userIndex = users.findIndex(u => u.id === userId);
+      
+      if (userIndex === -1) {
+        throw new Error(`User ${userId} not found`);
       }
-
-      // Clear cache to force refresh
-      localStorage.removeItem(STORAGE_KEY);
+      
+      // Update the user's status in the local array
+      users[userIndex].status = 'active';
+      
+      // Update cache
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+      
+      // Also clear the user details cache
+      localStorage.removeItem(`${USER_DETAILS_KEY}${userId}`);
+      
       console.log(`User ${userId} activated successfully`);
       return true;
     } catch (error) {

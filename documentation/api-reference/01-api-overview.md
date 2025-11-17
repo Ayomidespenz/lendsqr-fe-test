@@ -49,8 +49,8 @@ POST /auth/login
     "user": {
       "id": "user-1",
       "email": "user@example.com",
-      "firstName": "John",
-      "lastName": "Doe"
+      "firstName": "quadriyusuff",
+      "lastName": ""
     }
   }
 }
@@ -98,9 +98,9 @@ GET /users?page=1&limit=10
     "users": [
       {
         "id": "user-1",
-        "firstName": "John",
-        "lastName": "Doe",
-        "email": "john@example.com",
+        "firstName": "quadriyusuff",
+        "lastName": "",
+        "email": "quadriyusuff@example.com",
         "phone": "+1234567890",
         "dateJoined": "2024-01-15",
         "status": "active",
@@ -146,9 +146,9 @@ GET /users/:userId
   "success": true,
   "data": {
     "id": "user-1",
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "john@example.com",
+    "firstName": "quadriyusuff",
+    "lastName": "",
+    "email": "quadriyusuff@example.com",
     "phone": "+1234567890",
     "dateJoined": "2024-01-15",
     "status": "active",
@@ -203,9 +203,9 @@ GET /users/search?query=john
     "users": [
       {
         "id": "user-1",
-        "firstName": "John",
-        "lastName": "Doe",
-        "email": "john@example.com",
+        "firstName": "quadriyusuff",
+        "lastName": "",
+        "email": "quadriyusuff@example.com",
         ...
       }
     ]
@@ -215,7 +215,7 @@ GET /users/search?query=john
 
 **Code Example:**
 ```typescript
-const results = await userApi.searchUsers('john');
+const results = await userApi.searchUsers('quadriyusuff');
 console.log(results);  // Array of matching users
 ```
 

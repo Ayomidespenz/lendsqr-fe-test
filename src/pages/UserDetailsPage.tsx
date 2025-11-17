@@ -21,9 +21,11 @@ export const UserDetailsPage = () => {
   // Extended user data with generated details
   const userDetails = userFromList ? {
     // Personal Information (from API)
-    fullName: `${userFromList.username.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`,
-    phoneNumber: userFromList.phoneNumber,
-    emailAddress: userFromList.email,
+    fullName: userFromList.username ? 
+      userFromList.username.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') :
+      `User ${userFromList.id}`,
+    phoneNumber: userFromList.phoneNumber || 'N/A',
+    emailAddress: userFromList.email || 'N/A',
     bvn: `${Math.floor(Math.random() * 9000000000) + 1000000000}`,
     gender: Math.random() > 0.5 ? 'Male' : 'Female',
     maritalStatus: ['Single', 'Married', 'Divorced'][Math.floor(Math.random() * 3)],
@@ -47,15 +49,15 @@ export const UserDetailsPage = () => {
     // Guarantors
     guarantors: [
       {
-        fullName: 'John Doe',
+        fullName: 'quadriyusuff',
         phoneNumber: '08012345678',
-        emailAddress: 'john@gmail.com',
+        emailAddress: 'quadriyusuff@gmail.com',
         relationship: 'Brother',
       },
       {
-        fullName: 'Jane Smith',
+        fullName: 'quadriyusuff',
         phoneNumber: '07012345678',
-        emailAddress: 'jane@gmail.com',
+        emailAddress: 'quadriyusuff@gmail.com',
         relationship: 'Sister',
       },
     ],
