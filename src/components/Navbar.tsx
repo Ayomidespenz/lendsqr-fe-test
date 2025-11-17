@@ -5,6 +5,7 @@ import SearchIcon from '../assets/search.png';
 import DefaultAvatar from '../assets/image 4.png';
 import BellIcon from '../assets/bellIcon.png';
 import DropdownIcon from '../assets/dropdown.png';
+import LogoutIcon from '../assets/logout.png';
 
 interface NavbarProps {
   userName?: string;
@@ -109,7 +110,8 @@ export const Navbar = ({ userName = 'Adedoyin', userAvatar, onLogout, onSidebarT
                   onClick={handleLogout}
                   className={`${styles.menuItem} ${styles.logout}`}
                 >
-                  🚪 Logout
+                  <img src={LogoutIcon} alt="Logout" className={styles.logoutIcon} />
+                  Logout
                 </button>
               </div>
             )}
