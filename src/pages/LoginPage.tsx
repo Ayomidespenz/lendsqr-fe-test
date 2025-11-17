@@ -74,28 +74,12 @@ export const LoginPage = () => {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Mock user credentials
-    const MOCK_USER = {
-      email: 'admin@lendsqr.com',
-      password: 'password123'
-    };
+    // Allow any user to login with any valid email and password
+    const mockToken = `token_${Date.now()}`;
+    localStorage.setItem('auth_token', mockToken);
+    localStorage.setItem('user_email', formData.email);
 
-    if (
-      formData.email === MOCK_USER.email &&
-      formData.password === MOCK_USER.password
-    ) {
-      // Mock successful login
-      const mockToken = `token_${Date.now()}`;
-      localStorage.setItem('auth_token', mockToken);
-      localStorage.setItem('user_email', formData.email);
-
-      navigate('/dashboard');
-    } else {
-      // Wrong credentials
-      setErrors({
-        general: 'Invalid email or password. Please try again.',
-      });
-    }
+    navigate('/dashboard');
   } catch {
     setErrors({
       general: 'An error occurred during login. Please try again.',
