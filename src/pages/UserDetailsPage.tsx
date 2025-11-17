@@ -13,10 +13,16 @@ export const UserDetailsPage = () => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>('general');
+  const [userStatus, setUserStatus] = useState<string | null>(null);
   const { users, loading, error } = useUsers();
 
   // Find the user from the users list
-  const userFromList = users.find(u => u.id === userId);
+  let userFromList = users.find(u => u.id === userId);
+  
+  // Override status if it has been updated
+  if (userStatus && userFromList) {
+    userFromList = { ...userFromList, status: userStatus as any };
+  }
 
   // Extended user data with generated details
   const userDetails = userFromList ? {
@@ -110,12 +116,11 @@ export const UserDetailsPage = () => {
     try {
       const success = await userApi.blacklistUser(userFromList.id);
       if (success) {
+        setUserStatus('blacklisted');
         toast.success(`User ${userDetails.fullName} has been blacklisted`, {
           position: 'top-right',
           autoClose: 3000,
         });
-        // Refresh page after toast shows
-        setTimeout(() => window.location.reload(), 3500);
       } else {
         toast.error(`Failed to blacklist user ${userDetails.fullName}`, {
           position: 'top-right',
@@ -136,12 +141,11 @@ export const UserDetailsPage = () => {
     try {
       const success = await userApi.activateUser(userFromList.id);
       if (success) {
+        setUserStatus('active');
         toast.success(`User ${userDetails.fullName} has been activated`, {
           position: 'top-right',
           autoClose: 3000,
         });
-        // Refresh page after toast shows
-        setTimeout(() => window.location.reload(), 3500);
       } else {
         toast.error(`Failed to activate user ${userDetails.fullName}`, {
           position: 'top-right',

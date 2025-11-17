@@ -20,12 +20,21 @@ export const DashboardPage = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filterPosition, setFilterPosition] = useState<{ top: number; left: number }>({ top: 60, left: 0 });
   const [filters, setFilters] = useState<FilterCriteria>({});
+  const [userStatusUpdates, setUserStatusUpdates] = useState<Record<string, string>>({});
   
   const itemsPerPage = 100;
 
+  // Apply status updates to users
+  const updatedUsers = useMemo(() => {
+    return users.map(user => ({
+      ...user,
+      status: userStatusUpdates[user.id] || user.status
+    }));
+  }, [users, userStatusUpdates]);
+
   // Filter users based on criteria
   const filteredUsers = useMemo(() => {
-    return users.filter(user => {
+    return updatedUsers.filter(user => {
       if (filters.organization && user.organization !== filters.organization) return false;
       if (filters.username && !user.username.toLowerCase().includes(filters.username.toLowerCase())) return false;
       if (filters.email && !user.email.toLowerCase().includes(filters.email.toLowerCase())) return false;
@@ -34,7 +43,7 @@ export const DashboardPage = () => {
       if (filters.dateJoined && user.dateJoined !== filters.dateJoined) return false;
       return true;
     });
-  }, [users, filters]);
+  }, [updatedUsers, filters]);
 
   const totalItems = filteredUsers.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -101,12 +110,11 @@ export const DashboardPage = () => {
     try {
       const success = await userApi.blacklistUser(row.id);
       if (success) {
+        setUserStatusUpdates(prev => ({ ...prev, [row.id]: 'blacklisted' }));
         toast.success(`User ${row.username} has been blacklisted`, {
           position: 'top-right',
           autoClose: 3000,
         });
-        // Refresh page to show updated data after toast shows
-        setTimeout(() => window.location.reload(), 3500);
       } else {
         toast.error(`Failed to blacklist user ${row.username}`, {
           position: 'top-right',
@@ -126,12 +134,11 @@ export const DashboardPage = () => {
     try {
       const success = await userApi.activateUser(row.id);
       if (success) {
+        setUserStatusUpdates(prev => ({ ...prev, [row.id]: 'active' }));
         toast.success(`User ${row.username} has been activated`, {
           position: 'top-right',
           autoClose: 3000,
         });
-        // Refresh page to show updated data after toast shows
-        setTimeout(() => window.location.reload(), 3500);
       } else {
         toast.error(`Failed to activate user ${row.username}`, {
           position: 'top-right',
