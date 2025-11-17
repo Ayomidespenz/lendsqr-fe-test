@@ -38,6 +38,30 @@
     top: $spacing-lg;
     left: $spacing-lg;
   }
+
+  @include media-md {
+    position: static;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: $spacing-lg;
+    top: auto;
+    left: auto;
+    z-index: 10;
+  }
+
+  @include media-sm {
+    position: static;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: $spacing-lg;
+    top: auto;
+    left: auto;
+    z-index: 10;
+  }
 }
 
 .illustration {
@@ -57,10 +81,14 @@
     width: 100%;
     min-height: 100vh;
     padding: $spacing-xl;
+    padding-top: $spacing-2xl;
   }
-
+  
   @include media-sm {
+    text-align: center;
+    font-size: 8px;
     padding: $spacing-lg;
+    padding-top: $spacing-xl;
   }
 }
 

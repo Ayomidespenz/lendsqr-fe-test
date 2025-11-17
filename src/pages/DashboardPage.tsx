@@ -17,12 +17,17 @@ export const DashboardPage = () => {
   const navigate = useNavigate();
   const { users, loading, error } = useUsers();
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(100);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filterPosition, setFilterPosition] = useState<{ top: number; left: number }>({ top: 60, left: 0 });
   const [filters, setFilters] = useState<FilterCriteria>({});
   const [userStatusUpdates, setUserStatusUpdates] = useState<Record<string, string>>({});
-  
-  const itemsPerPage = 100;
+
+  // Reset to page 1 when items per page changes
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+  };
 
   // Apply status updates to users
   const updatedUsers = useMemo(() => {
@@ -281,6 +286,7 @@ export const DashboardPage = () => {
               totalPages={totalPages}
               onPageChange={setCurrentPage}
               itemsPerPage={itemsPerPage}
+              onItemsPerPageChange={handleItemsPerPageChange}
               totalItems={totalItems}
             />
           </div>
