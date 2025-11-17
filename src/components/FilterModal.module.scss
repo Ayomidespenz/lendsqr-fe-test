@@ -15,18 +15,32 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   padding: $spacing-lg;
   width: 320px;
-  display: flex;
+  // border: 2px solid red;
+   display: flex;
   flex-direction: column;
-  gap: $spacing-md;
-  max-height: 80vh;
+  gap: $spacing-lg;
+  max-height: 60vh;
   overflow-y: auto;
-  min-height: 400px;
+  
+  // Hide scrollbar while maintaining scroll functionality
+  -ms-overflow-style: none; // IE and Edge
+  scrollbar-width: none; // Firefox
+  
+  &::-webkit-scrollbar {
+    display: none; // Chrome, Safari and Opera
+  }
 }
 
 .formGroup {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
 }
 
 .label {
