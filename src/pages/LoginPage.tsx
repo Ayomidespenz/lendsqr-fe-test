@@ -110,10 +110,8 @@ export const LoginPage = () => {
 
       <div className={styles.formSection}>
         <div className={styles.formContainer}>
-          {/* Logo for mobile/tablet */}
-          <div className={styles.logoPosition}>
-            <img src={Logo} alt="Lendsqr" className={styles.logo} />
-          </div>
+       
+          
 
           {/* Welcome Text */}
           <div className={styles.welcomeText}>
